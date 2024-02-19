@@ -30,6 +30,38 @@ public class CCuenta {
         tipoInterés = tipo;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(String cuenta) {
+        this.cuenta = cuenta;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getTipoInterés() {
+        return tipoInterés;
+    }
+
+    public void setTipoInterés(double tipoInterés) {
+        this.tipoInterés = tipoInterés;
+    }
+
     /**
      * Método para obtener el saldo actual de la cuenta.
      * @return El saldo actual de la cuenta.
@@ -61,4 +93,23 @@ public class CCuenta {
             throw new Exception("No se hay suficiente saldo");
         saldo = saldo - cantidad;
     }
+    
+    public void operativa_cuenta() {
+    double saldoActual;
+
+    saldoActual = estado();
+    System.out.println("El saldo actual es " + saldoActual);
+
+    try {
+        retirar(2300);
+    } catch (Exception e) {
+        System.out.print("Fallo al retirar");
+    }
+    try {
+        System.out.println("Ingreso en cuenta");
+        ingresar(695);
+    } catch (Exception e) {
+        System.out.print("Fallo al ingresar");
+    }
+}
 }
