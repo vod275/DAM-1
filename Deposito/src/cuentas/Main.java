@@ -26,12 +26,10 @@ public class Main {
         }
     }
     
-    public static void operativa_cuenta(CCuenta cuenta, double cantidad) throws Exception {
+    public static void operativa_cuenta(CCuenta cuenta, float cantidad) throws Exception {
     System.out.println("Retirando " + cantidad + " de la cuenta...");
     cuenta.retirar(cantidad);
-
-    // Aquí puedes agregar cualquier lógica adicional con la cantidad que desees
-    // Por ejemplo, si quieres ingresar la misma cantidad retirada como interés, puedes hacer lo siguiente:
+    
     System.out.println("Ingresando " + cantidad + " en la cuenta como interés...");
     cuenta.ingresar(cantidad);
 
