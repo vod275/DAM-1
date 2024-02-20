@@ -30,34 +30,58 @@ public class CCuenta {
         tipoInterés = tipo;
     }
 
+    /**
+     * Getter de nombre.
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Setter de nombre.
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Getter de cuenta.
+     */
     public String getCuenta() {
         return cuenta;
     }
 
+    /**
+     * Setter de cuenta.
+     */
     public void setCuenta(String cuenta) {
         this.cuenta = cuenta;
     }
 
+    /**
+     * Getter de saldo.
+     */
     public double getSaldo() {
         return saldo;
     }
 
+    /**
+     * Setter de saldo.
+     */
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
+    /**
+     * Getter de tipoInteres.
+     */
     public double getTipoInterés() {
         return tipoInterés;
     }
 
+    /**
+     * Setter de tipoInteres.
+     */
     public void setTipoInterés(double tipoInterés) {
         this.tipoInterés = tipoInterés;
     }
@@ -94,6 +118,10 @@ public class CCuenta {
         saldo = saldo - cantidad;
     }
     
+    
+    /**
+     * Método para operar la cuenta.
+     */
     public void operativa_cuenta() {
     double saldoActual;
 
