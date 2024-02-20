@@ -32,6 +32,7 @@ public class CCuenta {
 
     /**
      * Getter de nombre.
+     * return nombre
      */
     public String getNombre() {
         return nombre;
@@ -139,5 +140,6 @@ public class CCuenta {
     } catch (Exception e) {
         System.out.print("Fallo al ingresar");
     }
+    System.out.println("El saldo actual es " + saldoActual);
 }
 }
