@@ -32,7 +32,7 @@ public class CCuenta {
 
     /**
      * Getter de nombre.
-     * return nombre
+     * @return  nombre
      */
     public String getNombre() {
         return nombre;
@@ -40,6 +40,7 @@ public class CCuenta {
 
     /**
      * Setter de nombre.
+     * @param nombre Nombre titular de la cuenta.
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -47,6 +48,7 @@ public class CCuenta {
 
     /**
      * Getter de cuenta.
+     * @return cuenta.
      */
     public String getCuenta() {
         return cuenta;
@@ -54,6 +56,7 @@ public class CCuenta {
 
     /**
      * Setter de cuenta.
+     * @param cuenta Numero de cuenta del  titular.
      */
     public void setCuenta(String cuenta) {
         this.cuenta = cuenta;
@@ -61,6 +64,7 @@ public class CCuenta {
 
     /**
      * Getter de saldo.
+     * @return saldo.
      */
     public double getSaldo() {
         return saldo;
@@ -68,6 +72,7 @@ public class CCuenta {
 
     /**
      * Setter de saldo.
+     *  @param saldo.
      */
     public void setSaldo(double saldo) {
         this.saldo = saldo;
@@ -75,6 +80,7 @@ public class CCuenta {
 
     /**
      * Getter de tipoInteres.
+     * @return tipoInterés.
      */
     public double getTipoInterés() {
         return tipoInterés;
@@ -82,6 +88,7 @@ public class CCuenta {
 
     /**
      * Setter de tipoInteres.
+     * @param tipoInterés.
      */
     public void setTipoInterés(double tipoInterés) {
         this.tipoInterés = tipoInterés;
@@ -89,7 +96,7 @@ public class CCuenta {
 
     /**
      * Método para obtener el saldo actual de la cuenta.
-     * @return El saldo actual de la cuenta.
+     * @return saldo.
      */
     public double estado() {
         return saldo;
@@ -140,6 +147,5 @@ public class CCuenta {
     } catch (Exception e) {
         System.out.print("Fallo al ingresar");
     }
-    System.out.println("El saldo actual es " + saldoActual);
 }
 }
