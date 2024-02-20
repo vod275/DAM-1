@@ -3,6 +3,9 @@ package cuentas;
 
 import cuentas.CCuenta;
 
+ /**
+  * Clase main
+ */
 public class Main {
 
     public static void main(String[] args) {
