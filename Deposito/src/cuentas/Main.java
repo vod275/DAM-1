@@ -3,11 +3,13 @@ package cuentas;
 
 import cuentas.CCuenta;
 
- /**
-  * Clase main
- */
+ 
 public class Main {
 
+    /**
+    * Metodo main
+    * @param args
+    */
     public static void main(String[] args) {
     CCuenta cuenta1;
 
