@@ -8,7 +8,7 @@ package Persona;
  *
  * @author Victor Oliver Donoso
  */
-public enum Asignaturas {
+public enum Asignaturas  {
     
     BD("Bases de datos", "BD", 4),
     ED("Entornos de desarrollo", "ED", 3),
@@ -57,5 +57,14 @@ public enum Asignaturas {
         } else {
             return null;
         }
+    }
+    
+    public static Asignaturas fromString(String asignatura) {
+        for (Asignaturas a : Asignaturas.values()) {
+            if (a.getCodigo().equalsIgnoreCase(asignatura)) {
+                return a;
+            }
+        }
+        return null; // Retorna null si la cadena no coincide con ninguna asignatura
     }
 }

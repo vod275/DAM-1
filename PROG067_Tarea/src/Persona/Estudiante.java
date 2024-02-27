@@ -4,7 +4,7 @@
  */
 package Persona;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -12,10 +12,10 @@ import java.util.Date;
  */
 public class Estudiante extends Persona {
     private String identificador;
-    private Date fechaMatriculacion;
+    private LocalDate fechaMatriculacion;
 
     // Constructor
-    public Estudiante(String dni, String nombreCompleto, String correoElectronico, String identificador, Date fechaMatriculacion) {
+    public Estudiante(String dni, String nombreCompleto, String correoElectronico, String identificador, LocalDate fechaMatriculacion) {
         super(dni, nombreCompleto, correoElectronico);
         this.identificador = identificador;
         this.fechaMatriculacion = fechaMatriculacion;

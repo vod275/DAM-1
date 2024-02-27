@@ -5,20 +5,21 @@
 package Persona;
 
 import Interfaces.IGestionAcademica;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 
 /**
  *
  * @author Victor Oliver Donoso
  */
-public abstract class Profesor extends Persona  implements IGestionAcademica {
+public  class Profesor extends Persona {
     private String identificador;
-    private Date fechaAlta;
+    private LocalDate fechaAlta;
     private Asignaturas asignaturaImparte;
 
     // Constructor
-    public Profesor(String dni, String nombreCompleto, String correoElectronico, String identificador, Date fechaAlta, Asignaturas asignaturaImparte) {
+    public Profesor(String dni, String nombreCompleto, String correoElectronico, String identificador, LocalDate fechaAlta, Asignaturas asignaturaImparte) {
         super(dni, nombreCompleto, correoElectronico);
         this.identificador = identificador;
         this.fechaAlta = fechaAlta;
@@ -34,11 +35,11 @@ public abstract class Profesor extends Persona  implements IGestionAcademica {
         this.identificador = identificador;
     }
 
-    public Date getFechaAlta() {
+    public LocalDate getFechaAlta() {
         return fechaAlta;
     }
 
-    public void setFechaAlta(Date fechaAlta) {
+    public void setFechaAlta(LocalDate fechaAlta) {
         this.fechaAlta = fechaAlta;
     }
 
@@ -49,13 +50,6 @@ public abstract class Profesor extends Persona  implements IGestionAcademica {
     public void setAsignaturaImparte(Asignaturas asignaturaImparte) { // Cambio aquí
         this.asignaturaImparte = asignaturaImparte;
     }
-    
-     public  String informeResultados(Profesor profesor) {
-        
-        return String.format("Informe de resultados del profesor: ",
-                profesor.getIdentificador(), profesor.getDni(), profesor.getNombreCompleto(), profesor.getCorreoElectronico());
-    }
-
-
-
+  
 }
+   
