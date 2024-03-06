@@ -30,17 +30,12 @@ public class Estudiante extends Persona {
         this.identificador = identificador;
     }
 
-    public Date getFechaMatriculacion() {
+    public LocalDate getFechaMatriculacion() {
         return fechaMatriculacion;
     }
 
-    public void setFechaMatriculacion(Date fechaMatriculacion) {
+    public void setFechaMatriculacion(LocalDate fechaMatriculacion) {
         this.fechaMatriculacion = fechaMatriculacion;
     }
 
-      public static String informeResultados(Estudiante estudiante) {
-      
-        return String.format("Informe de resultados del estudiante %s: ",
-                estudiante.getIdentificador(), estudiante.getDni(), estudiante.getNombreCompleto(), estudiante.getCorreoElectronico());
-    }
 }

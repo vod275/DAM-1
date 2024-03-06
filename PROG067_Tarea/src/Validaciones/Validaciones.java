@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
+
 
 /**
  *
@@ -63,9 +63,9 @@ public class Validaciones {
 
      
     
-    public static boolean validarIdentificadorProfesor(String identificador) {
+    public static boolean validarIdentificadorProfesor(String identificadorProfesor) {
         // Comprobar si el identificador tiene el formato adecuado
-        if (!identificador.matches("(590|591|592)\\d{5}(INF|ING|FOL|SIA)")) {
+        if (!identificadorProfesor.matches("(590|591|592)\\d{5}(INF|ING|FOL|SIA)")) {
             return false;
         }
         return true;

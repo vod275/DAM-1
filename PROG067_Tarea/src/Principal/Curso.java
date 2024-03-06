@@ -4,8 +4,13 @@
  */
 package Principal;
 
+import Persona.Asignaturas;
+import Persona.Estudiante;
+import Persona.Profesor;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -24,9 +29,12 @@ public class Curso {
     private LocalDate fechaFinal;
     private int[][] notas;
     private int numAlumnosMatriculados;
+    private Estudiante[] estudiantes;
+    private Asignaturas[] asignaturas;
+
 
     // Constructor
-    public Curso(LocalDate fechaInicial, LocalDate fechaFinal) {
+    public Curso(String nombreCurso, LocalDate fechaInicial, LocalDate fechaFinal, int[][] notas, int numAlumnosMatriculados) {
         this.nombreCurso = NOMBRE_CURSO;
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
@@ -74,17 +82,114 @@ public class Curso {
         this.numAlumnosMatriculados = numAlumnosMatriculados;
     }
 
-    public Curso(String nombreCurso, LocalDate fechaInicial, LocalDate fechaFinal, int[][] notas, int numAlumnosMatriculados) {
-        this.nombreCurso = nombreCurso;
-        this.fechaInicial = fechaInicial;
-        this.fechaFinal = fechaFinal;
-        this.notas = notas;
-        this.numAlumnosMatriculados = numAlumnosMatriculados;
+  
+     public void agregarEstudiante(Estudiante estudiante, int[] notasEstudiante) {
+        // Verificar si hay espacio disponible en la tabla de notas
+        if (numAlumnosMatriculados >= MAX_ALUMNOS) {
+            System.out.println("Error: No hay espacio disponible para más estudiantes.");
+            return;
+        }
+
+        // Agregar estudiante a la lista de alumnos matriculados
+        numAlumnosMatriculados++;
+
+        // Obtener la posición del estudiante en la lista
+        int posicionEstudiante = numAlumnosMatriculados - 1;
+
+        // Guardar las notas del estudiante en la tabla de notas del curso
+        notas[posicionEstudiante] = Arrays.copyOf(notasEstudiante, NUM_ASIGNATURAS);     
+    }
+     
+      public String[] getIdentificadoresEstudiantes() {
+        String[] identificadores = new String[numAlumnosMatriculados];
+        for (int i = 0; i < numAlumnosMatriculados; i++) {
+            identificadores[i] = estudiantes[i].getIdentificador();
+        }
+        return identificadores;
+    }
+      
+      public String[] getAsignaturas() {
+        String[] codigos = new String[ NUM_ASIGNATURAS];
+        for (int i = 0; i <  NUM_ASIGNATURAS; i++) {
+            codigos[i] = asignaturas[i].getCodigo();
+        }
+        return codigos;
+    }
+      
+      
+      public  Profesor buscarProfesorPorId(String idProfesor, List<Profesor> profesores) {
+        for (Profesor profesor : profesores) {
+            if (profesor.getIdentificadorProfesor().equals(idProfesor)) {
+                return profesor;
+            }
+        }
+        return null; 
+    }
+    public int contarAprobados(int[][] notas) {
+        int contadorAprobados = 0;
+        for (int[] alumnoNotas : notas) {
+            if (esAprobado(alumnoNotas)) {
+                contadorAprobados++;
+            }
+        }
+        return contadorAprobados;
     }
 
-  
-    public void agregarNotas(int[][] notas) {
-        this.notas = notas;
+    // Método auxiliar para verificar si un alumno está aprobado
+    private boolean esAprobado(int[] alumnoNotas) {
+        for (int nota : alumnoNotas) {
+            if (nota < 5) {
+                return false;
+            }
+        }
+        return true;
     }
+    
+
+    // Método para calcular la nota media de una asignatura
+    public double calcularNotaMedia(int[][] notas) {
+        double sumaNotas = 0;
+        int totalNotas = 0;
+        for (int[] alumnoNotas : notas) {
+            for (int nota : alumnoNotas) {
+                sumaNotas += nota;
+                totalNotas++;
+            }
+        }
+        return totalNotas > 0 ? sumaNotas / totalNotas : 0; // Evitar división por cero
+    }
+
+    // Método para calcular la nota mínima de una asignatura
+    public int calcularNotaMinima(int[][] notas) {
+        int notaMinima = Integer.MAX_VALUE;
+        for (int[] alumnoNotas : notas) {
+            for (int nota : alumnoNotas) {
+                notaMinima = Math.min(notaMinima, nota);
+            }
+        }
+        return notaMinima != Integer.MAX_VALUE ? notaMinima : 0; // Si no hay notas, devolver 0
+    }
+
+    // Método para calcular la nota máxima de una asignatura
+    public int calcularNotaMaxima(int[][] notas) {
+        int notaMaxima = Integer.MIN_VALUE;
+        for (int[] alumnoNotas : notas) {
+            for (int nota : alumnoNotas) {
+                notaMaxima = Math.max(notaMaxima, nota);
+            }
+        }
+        return notaMaxima != Integer.MIN_VALUE ? notaMaxima : 0; // Si no hay notas, devolver 0
+    }
+      
+    
+     public  Estudiante buscarEstudiantesPorId(String identificador, List<Estudiante> estudiantes) {
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getIdentificador().equals(identificador)) {
+                return estudiante;
+            }
+        }
+        return null; 
+    }
+   
     
 }

@@ -4,8 +4,8 @@
  */
 package Persona;
 
-import Interfaces.IGestionAcademica;
 import java.time.LocalDate;
+import java.util.Arrays;
 
 
 
@@ -14,25 +14,25 @@ import java.time.LocalDate;
  * @author Victor Oliver Donoso
  */
 public  class Profesor extends Persona {
-    private String identificador;
+    private String identificadorProfesor;
     private LocalDate fechaAlta;
     private Asignaturas asignaturaImparte;
 
     // Constructor
-    public Profesor(String dni, String nombreCompleto, String correoElectronico, String identificador, LocalDate fechaAlta, Asignaturas asignaturaImparte) {
+    public Profesor(String dni, String nombreCompleto, String correoElectronico, String identificadorProfesor, LocalDate fechaAlta, Asignaturas asignaturaImparte) {
         super(dni, nombreCompleto, correoElectronico);
-        this.identificador = identificador;
+        this.identificadorProfesor = identificadorProfesor;
         this.fechaAlta = fechaAlta;
         this.asignaturaImparte = asignaturaImparte;
     }
 
     // Getters y setters específicos de Profesor
-    public String getIdentificador() {
-        return identificador;
+    public String getIdentificadorProfesor() {
+        return identificadorProfesor;
     }
 
     public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+        this.identificadorProfesor = identificador;
     }
 
     public LocalDate getFechaAlta() {

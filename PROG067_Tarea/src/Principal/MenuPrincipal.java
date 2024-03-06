@@ -3,15 +3,19 @@ package Principal;
 import Persona.Asignaturas;
 import Persona.Estudiante;
 import Persona.Profesor;
+import static Principal.Curso.NUM_ASIGNATURAS;
 import Validaciones.Validaciones;
-import static Validaciones.Validaciones.obtenerFecha;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuPrincipal {
     private static Curso curso;
-    private static Profesor profesor;
-    private static Estudiante estudiante;
+     static List<Profesor> listaProfesores = new ArrayList<>();
+     static List<Estudiante> listaEstudiantes = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -101,13 +105,13 @@ public class MenuPrincipal {
 
         // Validar el identificador
         System.out.println("Ingrese el identificador del profesor:");
-        String identificador = scanner.nextLine().trim();
+        String identificadorProfesor = scanner.nextLine().trim();
         while (true) {
-            if (identificador.equalsIgnoreCase("x")) {
+            if (identificadorProfesor.equalsIgnoreCase("x")) {
                 System.out.println("Operación cancelada.");
                 return;
             }
-            if (!Validaciones.validarIdentificadorProfesor(identificador)) {
+            if (!Validaciones.validarIdentificadorProfesor(identificadorProfesor)) {
                 System.out.println("Identificador incorrecto. Ingrese nuevamente (o 'x' para cancelar):");
             }
             break; // Agrega el break aquí
@@ -175,7 +179,8 @@ public class MenuPrincipal {
             break;
         } 
 
-        profesor = new Profesor(dni, nombreCompleto, correoElectronico, identificador, fechaAlta, asignaturaImparte);
+        Profesor profesor = new Profesor(dni, nombreCompleto, correoElectronico, identificadorProfesor, fechaAlta, asignaturaImparte);
+        listaProfesores.add(profesor);
         System.out.println("¡Profesor creado exitosamente!");
     }
 
@@ -261,32 +266,214 @@ public class MenuPrincipal {
           break;
         }
         
-        estudiante = new Estudiante(dni, nombreCompleto, correoElectronico, identificador, fechaMatriculacion);
-        System.out.println("¡Estudiante creado exitosamente!");
+         Estudiante estudiante = new Estudiante(dni, nombreCompleto, correoElectronico, identificador, fechaMatriculacion);
         
         
-
-        // Implementar lógica para añadir un nuevo estudiante al curso
+        
+         System.out.println("Ingrese las notas para el estudiante:");
+            int[] notas = new int[Curso.NUM_ASIGNATURAS];
+            for (int i = 0; i < Curso.NUM_ASIGNATURAS; i++) {
+                System.out.print("Nota para la asignatura " + Asignaturas.values()[i] + ": ");
+                notas[i] = scanner.nextInt();
+                if (notas[i] < 0 || notas[i] > 10) {
+                    System.out.println("La nota debe estar en el rango de 0 a 10. Inténtelo de nuevo.");
+                    i--; // Repetir la iteración para volver a solicitar la nota
+                }
+            }
+        curso.agregarEstudiante(estudiante, notas);
+        
+         System.out.println("Estudiante agregado correctamente.");
+         System.out.println("Posición del estudiante en la lista: " + curso.getNumAlumnosMatriculados());
+       
     }
 
+    
     private static void actualizarNota(Scanner scanner) {
-        // Implementar lógica para actualizar la nota de un estudiante en una asignatura
+        System.out.println("ID de estudiantes registrados:");
+        String[] identificadores = curso.getIdentificadoresEstudiantes();
+        for (String id : identificadores) {
+          System.out.println(id);
+        }
+        
+        
+        // Solicitar el ID del alumno
+        System.out.println("Ingrese el ID del alumno:");
+        String idAlumno = scanner.nextLine().trim();
+        
+        // Buscar el alumno con el ID proporcionado
+        int indiceAlumno = -1;
+        for (int i = 0; i < curso.getNumAlumnosMatriculados(); i++) {
+            if  (curso.getIdentificadoresEstudiantes()[i].equals(idAlumno)) {
+                indiceAlumno = i;
+                break;
+            }
+        }
+        // Verificar si se encontró al alumno
+        if (indiceAlumno == -1) {
+            System.out.println("El alumno con ID " + idAlumno + " no está registrado en este curso.");
+            return;
+        }
+        
+        
+       
+        
+
+        
+        // Mostrar los códigos de las asignaturas registradas para ayudar en la entrada de datos
+        System.out.println("Códigos de asignaturas registradas:");
+        String[] asignaturasLista = curso.getAsignaturas();
+        for (String codigo : asignaturasLista ) {
+            System.out.println(codigo);
+        }
+        
+        // Solicitar el código de la asignatura
+        System.out.println("Ingrese el código de la asignatura: ");
+        String codigoAsignatura = scanner.nextLine().trim();
+        
+        // Verificar si la asignatura existe
+        int indiceAsignatura = -1;
+        for (int i = 0; i < NUM_ASIGNATURAS; i++) {
+            if (curso.getAsignaturas()[i].equals(codigoAsignatura)) {
+                indiceAsignatura = i;
+                break;
+            }
+        }        
+        // Verificar si se encontró la asignatura
+        if (indiceAsignatura == -1) {
+            System.out.println("La asignatura con código " + codigoAsignatura + " no está registrada en este curso.");
+            return;
+        }
+        
+ 
+        
+        // Mostrar la nota actual del alumno en esa asignatura
+        int notaActual = curso.getNotas()[indiceAlumno][indiceAsignatura];
+        System.out.println("La nota actual del alumno con ID: " + idAlumno + " en la asignatura: " +
+                           codigoAsignatura + " es: " + notaActual);
+        
+        // Solicitar la nueva nota
+        int nuevaNota;
+        do {
+            System.out.println("Ingrese la nueva nota para esta asignatura (entre 0 y 10):");
+            nuevaNota = Integer.parseInt(scanner.nextLine().trim());
+        } while (nuevaNota < 0 || nuevaNota > 10);
+        
+        // Actualizar la nota correspondiente
+        curso.getNotas()[indiceAlumno][indiceAsignatura] = nuevaNota;
+        
+        System.out.println("La nota del alumno con ID " + idAlumno + " en la asignatura " +
+                           codigoAsignatura + " ha sido actualizada correctamente.");
     }
+
 
     private static void informeAsignatura(Scanner scanner) {
-        // Implementar lógica para generar informe de una asignatura
+    // Solicitar por teclado el ID del profesor
+    System.out.println("Ingrese el ID del profesor:");
+    String idProfesor = scanner.nextLine().trim();
+
+    // Verificar que el ID del profesor está en la lista de profesores
+    Profesor profesor = curso.buscarProfesorPorId(idProfesor, listaProfesores);
+    if (profesor == null) {
+        System.out.println("El ID del profesor no está en la lista.");
+        return;
     }
+
+    // Obtener el nombre de la asignatura que imparte el profesor
+    Asignaturas nombreAsignatura = profesor.getAsignaturaImparte();
+
+    // Calcular estadísticas de la asignatura
+    int[][] notas = curso.getNotas();
+    int numAlumnos = curso.getNumAlumnosMatriculados();
+    int aprobados = curso.contarAprobados(notas);
+    int suspendidos = numAlumnos - aprobados;
+    double porcentajeAprobados = (double) aprobados / numAlumnos * 100;
+    double porcentajeSuspendidos = 100 - porcentajeAprobados;
+    double notaMedia = curso.calcularNotaMedia(notas);
+    int notaMinima = curso.calcularNotaMinima(notas);
+    int notaMaxima = curso.calcularNotaMaxima(notas);
+
+    // Mostrar estadísticas de la asignatura
+    System.out.println("Información de la asignatura:");
+    System.out.println("Nombre del profesor: " + profesor.getNombreCompleto());
+    System.out.println("ID del profesor: " + profesor.getIdentificadorProfesor());
+    System.out.println("Nombre de la asignatura: " + nombreAsignatura);
+    System.out.println("Número de alumnos aprobados: " + aprobados);
+    System.out.printf("Porcentaje de aprobados: %.2f%%\n", porcentajeAprobados);
+    System.out.println("Número de alumnos suspendidos: " + suspendidos);
+    System.out.printf("Porcentaje de suspendidos: %.2f%%\n", porcentajeSuspendidos);
+    System.out.printf("Nota media de la asignatura: %.2f\n", notaMedia);
+    System.out.println("Nota mínima: " + notaMinima);
+    System.out.println("Nota máxima: " + notaMaxima);
+}
+
 
     private static void informeEstudiante(Scanner scanner) {
-        // Implementar lógica para generar informe de un estudiante
+        
+        // Solicitar por teclado el ID del profesor
+            System.out.println("Ingrese el ID del estudiante:");
+            String idAlumno = scanner.nextLine().trim();
+          // Buscar al alumno por su ID
+        Estudiante estudiante = curso.buscarEstudiantesPorId(idAlumno, listaEstudiantes);
+        if (estudiante == null) {
+            System.out.println("El ID del alumno no está en la lista.");
+            return;
+        }
+
+        // Mostrar datos identificativos del alumno
+        System.out.println("Datos identificativos del alumno:");
+        System.out.println("DNI: " + estudiante.getDni());
+        System.out.println("Nombre completo: " + estudiante.getNombreCompleto());
+        System.out.println("Correo electrónico: " + estudiante.getCorreoElectronico());
+        System.out.println("Fecha de matriculación: " + estudiante.getFechaMatriculacion());
+
+        // Mostrar relación de notas de todas las asignaturas
+        int[][] notas = curso.getNotas();
+        System.out.println("Relación de notas de todas las asignaturas:");
+        for (int i = 0; i < notas.length; i++) {
+            System.out.println("Asignatura " + (i+1) + ": " + notas[i]);
+        }
+
+        // Calcular estadísticas
+        int aprobados = curso.contarAprobados(notas);
+        int suspendidos = notas.length - aprobados;
+        double notaMedia = curso.calcularNotaMedia(notas);
+        double porcentajeAprobadas = ((double) aprobados / notas.length) * 100;
+
+        // Mostrar resumen
+        System.out.println("Resumen:");
+        System.out.println("Número de aprobados: " + aprobados);
+        System.out.println("Número de suspensos: " + suspendidos);
+        System.out.printf("Nota media: %.2f\n", notaMedia);
+        System.out.printf("Porcentaje de asignaturas aprobadas: %.2f%%\n", porcentajeAprobadas);
     }
 
+    
     private static void informeGeneral() {
         // Implementar lógica para generar informe general del curso
     }
 
     
+    
+    
+   public static LocalDate obtenerFecha(Scanner scanner) {
+        LocalDate fecha = null;
+        boolean fechaValida = false;
+        
+        while (!fechaValida) {
+            System.out.println("Ingrese la fecha (formato dd-MM-yyyy):");
+            String input = scanner.nextLine().trim();
 
+            try {
+                // Intentar convertir la cadena ingresada en un objeto LocalDate
+                fecha = LocalDate.parse(input, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                fechaValida = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Inténtelo de nuevo.");
+            }
+        }
+        
+        return fecha;
+    }
 }
 
 
