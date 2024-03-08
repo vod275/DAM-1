@@ -271,7 +271,7 @@ public class MenuPrincipal {
         
         
          System.out.println("Ingrese las notas para el estudiante:");
-            int[] notas = new int[Curso.NUM_ASIGNATURAS];
+            double[] notas = new double[Curso.NUM_ASIGNATURAS];
             for (int i = 0; i < Curso.NUM_ASIGNATURAS; i++) {
                 System.out.print("Nota para la asignatura " + Asignaturas.values()[i] + ": ");
                 notas[i] = scanner.nextInt();
@@ -347,7 +347,7 @@ public class MenuPrincipal {
  
         
         // Mostrar la nota actual del alumno en esa asignatura
-        int notaActual = curso.getNotas()[indiceAlumno][indiceAsignatura];
+        double notaActual = curso.getNotas()[indiceAlumno][indiceAsignatura];
         System.out.println("La nota actual del alumno con ID: " + idAlumno + " en la asignatura: " +
                            codigoAsignatura + " es: " + notaActual);
         
@@ -382,15 +382,15 @@ public class MenuPrincipal {
     Asignaturas nombreAsignatura = profesor.getAsignaturaImparte();
 
     // Calcular estadísticas de la asignatura
-    int[][] notas = curso.getNotas();
+    double[][] notas = curso.getNotas();
     int numAlumnos = curso.getNumAlumnosMatriculados();
     int aprobados = curso.contarAprobados(notas);
     int suspendidos = numAlumnos - aprobados;
     double porcentajeAprobados = (double) aprobados / numAlumnos * 100;
     double porcentajeSuspendidos = 100 - porcentajeAprobados;
     double notaMedia = curso.calcularNotaMedia(notas);
-    int notaMinima = curso.calcularNotaMinima(notas);
-    int notaMaxima = curso.calcularNotaMaxima(notas);
+    double notaMinima = curso.calcularNotaMinima(notas);
+    double notaMaxima = curso.calcularNotaMaxima(notas);
 
     // Mostrar estadísticas de la asignatura
     System.out.println("Información de la asignatura:");
@@ -427,15 +427,19 @@ public class MenuPrincipal {
         System.out.println("Fecha de matriculación: " + estudiante.getFechaMatriculacion());
 
         // Mostrar relación de notas de todas las asignaturas
-        int[][] notas = curso.getNotas();
-        System.out.println("Relación de notas de todas las asignaturas:");
+        double[][] notas = curso.getNotas();
+       System.out.println("Relación de notas de todas las asignaturas:");
         for (int i = 0; i < notas.length; i++) {
-            System.out.println("Asignatura " + (i+1) + ": " + notas[i]);
+            System.out.print("Asignatura " + (i+1) + ": ");
+            for (int j = 0; j < notas[i].length; j++) {
+                System.out.print(notas[i][j] + " ");
+            }
+            System.out.println();
         }
 
         // Calcular estadísticas
-        int aprobados = curso.contarAprobados(notas);
-        int suspendidos = notas.length - aprobados;
+        double aprobados = curso.contarAprobados(notas);
+        double suspendidos = notas.length - aprobados;
         double notaMedia = curso.calcularNotaMedia(notas);
         double porcentajeAprobadas = ((double) aprobados / notas.length) * 100;
 
@@ -449,8 +453,61 @@ public class MenuPrincipal {
 
     
     private static void informeGeneral() {
-        // Implementar lógica para generar informe general del curso
+        
+      // Si el curso es null, significa que no se pudo obtener la información, mostrar mensaje y salir
+      if (curso == null) {
+          System.out.println("No se pudo obtener la información del curso.");
+          return;
+        }
+      
+        // Obtener año de inicio y fin del curso
+        int yearInicio = curso.getFechaInicial().getYear();
+        int yearFin = curso.getFechaFinal().getYear();
+        String titulo = String.format("Informe general del curso %d/%d\n", yearInicio, yearFin);
+        System.out.println(titulo);
+
+        // Nombre del curso
+        System.out.println("Nombre del curso: " + curso.getNombreCurso());
+
+        // Cabeceras de las columnas
+        System.out.printf("%-15s %-40s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-15s\n",
+                "ID Alumno", "Nombre", "BD", "ED", "FOL", "ING", "LMSGI", "PROG", "SI", "Nota Media");
+         
+             // Separador
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+        // Recorrer cada estudiante
+        for (int i = 0; i < curso.getNumAlumnosMatriculados(); i++) {
+            Estudiante estudiante = curso.buscarEstudiantesPorIndice(i, listaEstudiantes);
+            double[][] notasEstudiante = curso.getNotas();
+            double notaMediaAsignatura = curso.calcularNotaMedia(notasEstudiante);
+
+            // Imprimir información del estudiante y sus notas
+            System.out.printf("%-15s %-40s ", estudiante.getIdentificador(), estudiante.getNombreCompleto());
+            for (int j = 0; j < notasEstudiante[i].length; j++) {
+                double nota = notasEstudiante[i][j];
+                System.out.printf("%-10.2f ", nota);
+            }
+            System.out.printf("%-10.2f\n", notaMediaAsignatura);
+        }
+
+
+        
+        
+                // Separador
+            System.out.println("----------------------------------------------------------------------------------------------------------------------");
+
+            // Totales
+            System.out.printf("%-15s %-40s ", "Totales", "");
+            double[][] todasLasNotas = curso.getNotas();
+            double[] mediasPorAsignatura = curso.calcularMediasPorAsignatura(todasLasNotas);
+            double notaMediaCurso = curso.calcularNotaMediaCurso(todasLasNotas);
+            for (double media : mediasPorAsignatura) {
+                System.out.printf("%-10.2f ", media);
+            }
+            System.out.printf("%-10.2f\n", notaMediaCurso);
     }
+    
 
     
     

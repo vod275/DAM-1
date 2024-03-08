@@ -43,11 +43,11 @@ public  class Profesor extends Persona {
         this.fechaAlta = fechaAlta;
     }
 
-    public Asignaturas getAsignaturaImparte() { // Cambio aquí
+    public Asignaturas getAsignaturaImparte() { 
         return asignaturaImparte;
     }
 
-    public void setAsignaturaImparte(Asignaturas asignaturaImparte) { // Cambio aquí
+    public void setAsignaturaImparte(Asignaturas asignaturaImparte) { 
         this.asignaturaImparte = asignaturaImparte;
     }
   

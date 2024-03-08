@@ -9,7 +9,6 @@ import Persona.Estudiante;
 import Persona.Profesor;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,18 +26,18 @@ public class Curso {
     private String nombreCurso;
     private LocalDate fechaInicial;
     private LocalDate fechaFinal;
-    private int[][] notas;
+    private double[][] notas;
     private int numAlumnosMatriculados;
     private Estudiante[] estudiantes;
     private Asignaturas[] asignaturas;
 
 
     // Constructor
-    public Curso(String nombreCurso, LocalDate fechaInicial, LocalDate fechaFinal, int[][] notas, int numAlumnosMatriculados) {
+    public Curso(String nombreCurso, LocalDate fechaInicial, LocalDate fechaFinal, double[][] notas, int numAlumnosMatriculados) {
         this.nombreCurso = NOMBRE_CURSO;
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
-        this.notas = new int[MAX_ALUMNOS][NUM_ASIGNATURAS];
+        this.notas = new double[MAX_ALUMNOS][NUM_ASIGNATURAS];
         this.numAlumnosMatriculados = 0;
     }
 
@@ -66,11 +65,11 @@ public class Curso {
         this.fechaFinal = fechaFinal;
     }
 
-    public int[][] getNotas() {
+    public double[][] getNotas() {
         return notas;
     }
 
-    public void setNotas(int[][] notas) {
+    public void setNotas(double[][] notas) {
         this.notas = notas;
     }
 
@@ -83,7 +82,7 @@ public class Curso {
     }
 
   
-     public void agregarEstudiante(Estudiante estudiante, int[] notasEstudiante) {
+     public void agregarEstudiante(Estudiante estudiante, double[] notasEstudiante) {
         // Verificar si hay espacio disponible en la tabla de notas
         if (numAlumnosMatriculados >= MAX_ALUMNOS) {
             System.out.println("Error: No hay espacio disponible para más estudiantes.");
@@ -125,9 +124,9 @@ public class Curso {
         }
         return null; 
     }
-    public int contarAprobados(int[][] notas) {
+    public int contarAprobados(double[][] notas) {
         int contadorAprobados = 0;
-        for (int[] alumnoNotas : notas) {
+        for (double[] alumnoNotas : notas) {
             if (esAprobado(alumnoNotas)) {
                 contadorAprobados++;
             }
@@ -136,8 +135,8 @@ public class Curso {
     }
 
     // Método auxiliar para verificar si un alumno está aprobado
-    private boolean esAprobado(int[] alumnoNotas) {
-        for (int nota : alumnoNotas) {
+    private boolean esAprobado(double[] alumnoNotas) {
+        for (double nota : alumnoNotas) {
             if (nota < 5) {
                 return false;
             }
@@ -147,40 +146,40 @@ public class Curso {
     
 
     // Método para calcular la nota media de una asignatura
-    public double calcularNotaMedia(int[][] notas) {
+    public double calcularNotaMedia(double[][] notas) {
         double sumaNotas = 0;
         int totalNotas = 0;
-        for (int[] alumnoNotas : notas) {
-            for (int nota : alumnoNotas) {
+        for (double[] alumnoNotas : notas) {
+            for (double nota : alumnoNotas) {
                 sumaNotas += nota;
                 totalNotas++;
             }
         }
-        return totalNotas > 0 ? sumaNotas / totalNotas : 0; // Evitar división por cero
+        return totalNotas > 0 ? sumaNotas / totalNotas : 0;
     }
 
-    // Método para calcular la nota mínima de una asignatura
-    public int calcularNotaMinima(int[][] notas) {
-        int notaMinima = Integer.MAX_VALUE;
-        for (int[] alumnoNotas : notas) {
-            for (int nota : alumnoNotas) {
+        // Método para calcular la nota mínima de una asignatura
+    public double calcularNotaMinima(double[][] notas) {
+        double notaMinima = Double.MAX_VALUE;
+        for (double[] alumnoNotas : notas) {
+            for (double nota : alumnoNotas) {
                 notaMinima = Math.min(notaMinima, nota);
             }
         }
-        return notaMinima != Integer.MAX_VALUE ? notaMinima : 0; // Si no hay notas, devolver 0
+        return notaMinima != Double.MAX_VALUE ? notaMinima : 0.0; // Si no hay notas, devolver 0.0
     }
 
     // Método para calcular la nota máxima de una asignatura
-    public int calcularNotaMaxima(int[][] notas) {
-        int notaMaxima = Integer.MIN_VALUE;
-        for (int[] alumnoNotas : notas) {
-            for (int nota : alumnoNotas) {
+    public double calcularNotaMaxima(double[][] notas) {
+        double notaMaxima = Double.MIN_VALUE;
+        for (double[] alumnoNotas : notas) {
+            for (double nota : alumnoNotas) {
                 notaMaxima = Math.max(notaMaxima, nota);
             }
         }
-        return notaMaxima != Integer.MIN_VALUE ? notaMaxima : 0; // Si no hay notas, devolver 0
+        return notaMaxima != Double.MIN_VALUE ? notaMaxima : 0.0; // Si no hay notas, devolver 0.0
     }
-      
+
     
      public  Estudiante buscarEstudiantesPorId(String identificador, List<Estudiante> estudiantes) {
         for (Estudiante estudiante : estudiantes) {
@@ -191,5 +190,39 @@ public class Curso {
         return null; 
     }
    
+     
+        public Estudiante buscarEstudiantesPorIndice(int indice, List<Estudiante> estudiantes) {
+         if (indice >= 0 && indice < estudiantes.size()) {
+           return estudiantes.get(indice);
+          }
+         return null;
+        }
+        
+        public double[] calcularMediasPorAsignatura(double[][] notas) {
+        double[] mediasPorAsignatura = new double[notas[0].length]; // Inicializar un arreglo para almacenar las medias por asignatura
+        for (int j = 0; j < notas[0].length; j++) { // Recorrer las columnas de la matriz de notas (asignaturas)
+            double suma = 0;
+            int contador = 0;
+            for (int i = 0; i < notas.length; i++) { // Recorrer las filas de la matriz de notas (estudiantes)
+                suma += notas[i][j];
+                contador++;
+            }
+            mediasPorAsignatura[j] = contador > 0 ? suma / contador : 0; // Calcular la media de la asignatura
+        }
+        return mediasPorAsignatura;
+    }
+        
+        // Método para calcular la nota media del curso
+    public double calcularNotaMediaCurso(double[][] notas) {
+        double suma = 0;
+        int contador = 0;
+        for (int i = 0; i < notas.length; i++) { // Recorrer las filas de la matriz de notas (estudiantes)
+            for (int j = 0; j < notas[i].length; j++) { // Recorrer las columnas de la matriz de notas (asignaturas)
+                suma += notas[i][j];
+                contador++;
+            }
+        }
+        return contador > 0 ? suma / contador : 0; // Calcular la media del curso
+    }
     
 }
