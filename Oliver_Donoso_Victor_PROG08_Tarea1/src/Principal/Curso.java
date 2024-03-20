@@ -18,7 +18,6 @@ import java.util.List;
 public class Curso {
     
  // Constantes
-    static final int MAX_ALUMNOS = 100;
     static final int NUM_ASIGNATURAS = 7;
     static final String NOMBRE_CURSO = "DAM 1 E-Learning";
 
@@ -28,7 +27,8 @@ public class Curso {
     private LocalDate fechaFinal;
     private double[][] notas;
     private int numAlumnosMatriculados;
-    private Estudiante[] estudiantes;
+    private int MAX_ALUMNOS;
+     private List<Estudiante> estudiantes;
     private Asignaturas[] asignaturas;
 
 
@@ -82,7 +82,7 @@ public class Curso {
     }
 
   
-     public void agregarEstudiante(Estudiante estudiante, double[] notasEstudiante) {
+    public void agregarEstudiante(Estudiante estudiante, double[] notasEstudiante) {
         // Verificar si hay espacio disponible en la tabla de notas
         if (numAlumnosMatriculados >= MAX_ALUMNOS) {
             System.out.println("Error: No hay espacio disponible para más estudiantes.");
@@ -99,13 +99,15 @@ public class Curso {
         notas[posicionEstudiante] = Arrays.copyOf(notasEstudiante, NUM_ASIGNATURAS);     
     }
      
-      public String[] getIdentificadoresEstudiantes() {
+    public String[] getIdentificadoresEstudiantes() {
         String[] identificadores = new String[numAlumnosMatriculados];
-        for (int i = 0; i < numAlumnosMatriculados; i++) {
-            identificadores[i] = estudiantes[i].getIdentificador();
+        int i = 0;
+        for (Estudiante estudiante : estudiantes) {
+            identificadores[i++] = estudiante.getIdentificador();
         }
         return identificadores;
     }
+
       
       public String[] getAsignaturas() {
         String[] codigos = new String[ NUM_ASIGNATURAS];
@@ -116,7 +118,7 @@ public class Curso {
     }
       
       
-      public  Profesor buscarProfesorPorId(String idProfesor, List<Profesor> profesores) {
+    public  Profesor buscarProfesorPorId(String idProfesor, List<Profesor> profesores) {
         for (Profesor profesor : profesores) {
             if (profesor.getIdentificadorProfesor().equals(idProfesor)) {
                 return profesor;
@@ -180,7 +182,7 @@ public class Curso {
         return notaMaxima != Double.MIN_VALUE ? notaMaxima : 0.0; // Si no hay notas, devolver 0.0
     }
 
-    
+    //Metodo para recorrer la lista de estudiantes y encontrar el id 
      public  Estudiante buscarEstudiantesPorId(String identificador, List<Estudiante> estudiantes) {
         for (Estudiante estudiante : estudiantes) {
             if (estudiante.getIdentificador().equals(identificador)) {
@@ -223,6 +225,32 @@ public class Curso {
             }
         }
         return contador > 0 ? suma / contador : 0; // Calcular la media del curso
+    }
+    
+    // Método para buscar un estudiante por su identificador
+    public Estudiante buscarEstudiantesPorIdentificador(String identificador) {
+        // Iterar sobre la lista de estudiantes para buscar el que tenga el identificador dado
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getIdentificador().equalsIgnoreCase(identificador)) {
+                return estudiante; // Si se encuentra, devolver el estudiante
+            }
+        }
+        return null; // Si no se encuentra, devolver null
+    }
+    
+    
+    // Método para eliminar un estudiante por su identificador
+    public boolean eliminarEstudiante(String identificador) {
+        // Buscar el estudiante por su identificador
+        Estudiante estudiante = buscarEstudiantesPorIdentificador(identificador);
+
+        // Si se encuentra al estudiante, eliminarlo de la lista de estudiantes
+        if (estudiante != null) {
+            return estudiantes.remove(estudiante);
+           // Devolver true si se elimina correctamente
+        } else {
+            return false; // Devolver false si el estudiante no se encuentra en la lista
+        }
     }
     
 }

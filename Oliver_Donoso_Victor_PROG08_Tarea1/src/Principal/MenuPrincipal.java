@@ -35,19 +35,23 @@ public class MenuPrincipal {
                 case 3:
                     nuevoEstudiante(scanner);
                     break;
+                    
                 case 4:
-                    actualizarNota(scanner);
+                    eliminarEstudiante(scanner);
                     break;
                 case 5:
-                    informeAsignatura(scanner);
+                    actualizarNota(scanner);
                     break;
                 case 6:
-                    informeEstudiante(scanner);
+                    informeAsignatura(scanner);
                     break;
                 case 7:
-                    informeGeneral();
+                    informeEstudiante(scanner);
                     break;
                 case 8:
+                    informeGeneral();
+                    break;
+                case 9:
                     System.out.println("¡Hasta luego!");
                     return;
                 default:
@@ -57,16 +61,17 @@ public class MenuPrincipal {
     }
 
     private static void mostrarMenu() {
-        System.out.println("=== Menú Principal ===");
+        System.out.println("=== Menu Principal ===");
         System.out.println("1. Crear curso");
         System.out.println("2. Nuevo profesor");
         System.out.println("3. Nuevo estudiante");
-        System.out.println("4. Actualizar nota");
-        System.out.println("5. Informe de asignatura");
-        System.out.println("6. Informe de estudiante");
-        System.out.println("7. Informe general");
-        System.out.println("8. Salir");
-        System.out.print("Seleccione una opción: ");
+        System.out.println("4. Eliminar estudiante");
+        System.out.println("5. Actualizar nota");
+        System.out.println("6. Informe de asignatura");
+        System.out.println("7. Informe de estudiante");
+        System.out.println("8. Informe general");
+        System.out.println("9. Salir");
+        System.out.print("Seleccione una opcion: ");
     }
 
     private static void crearCurso(Scanner scanner) {
@@ -207,8 +212,29 @@ public class MenuPrincipal {
 
 
            // Validar el identificador
-            System.out.println("Ingrese el identificador del estudiante:");
-            String identificador = scanner.nextLine().trim();
+    String identificador;
+    while (true) {
+        System.out.println("Ingrese el identificador del estudiante:");
+        identificador = scanner.nextLine().trim();
+
+        if (identificador.equalsIgnoreCase("x")) {
+            System.out.println("Operación cancelada.");
+            return;
+        }
+
+        if (!Validaciones.validarIdentificadorAlumno(identificador)) {
+            System.out.println("Identificador incorrecto. Ingrese nuevamente (o 'x' para cancelar):");
+            continue;
+        }
+
+        // Verificar si el identificador ya está en uso por otro estudiante
+        if (curso.buscarEstudiantesPorIdentificador(identificador) != null) {
+            System.out.println("El identificador ingresado ya pertenece a otro estudiante. Inténtelo de nuevo.");
+            continue;
+        }
+
+        break;
+    }
 
         
         while (!Validaciones.validarIdentificadorAlumno(identificador)) {
@@ -531,6 +557,40 @@ public class MenuPrincipal {
         
         return fecha;
     }
+   
+   private static void eliminarEstudiante(Scanner scanner) {
+        // Solicitar al usuario el código del estudiante a eliminar
+        System.out.println("Ingrese el código del estudiante que desea eliminar:");
+        String codigoEstudiante = scanner.nextLine().trim();
+        
+         if (curso == null) {
+            System.out.println("No hay ningún curso asignado actualmente.");
+            return;
+        }
+
+        // Buscar al estudiante por su código
+        Estudiante estudiante = curso.buscarEstudiantesPorIdentificador(codigoEstudiante);
+        if (estudiante == null) {
+            System.out.println("El estudiante con el código ingresado no está registrado.");
+            return;
+        }
+
+        // Eliminar al estudiante del curso
+        if (curso.eliminarEstudiante(codigoEstudiante)) {
+            System.out.println("El estudiante ha sido eliminado correctamente del curso.");
+        } else {
+            System.out.println("Error al eliminar al estudiante del curso.");
+        }
+
+        // Eliminar al estudiante de la lista de estudiantes
+        if (listaEstudiantes.remove(estudiante)) {
+            System.out.println("El estudiante ha sido eliminado correctamente de la lista de estudiantes.");
+        } else {
+            System.out.println("Error al eliminar al estudiante de la lista de estudiantes.");
+        }
+    }
+   
+   
 }
 
 
