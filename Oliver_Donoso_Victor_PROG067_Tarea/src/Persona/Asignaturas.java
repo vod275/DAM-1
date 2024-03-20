@@ -41,6 +41,7 @@ public enum Asignaturas  {
         return creditos;
     }
  
+    // Método para obtener la descripcion de la asignatura
     public static String obtenerDescripcionAsignatura(String codigo) {
         for (Asignaturas asignatura : values()) {
             if (asignatura.getCodigo().equals(codigo)) {
@@ -65,6 +66,6 @@ public enum Asignaturas  {
                 return a;
             }
         }
-        return null; // Retorna null si la cadena no coincide con ninguna asignatura
+        return null; 
     }
 }
